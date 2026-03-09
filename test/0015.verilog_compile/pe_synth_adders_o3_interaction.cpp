@@ -144,7 +144,7 @@ endmodule
 
     auto settle = [&]() noexcept
     {
-        for(std::size_t i{}; i < 8u; ++i) { c.digital_clk(); }
+        for(std::size_t i = 0; i < 8u; ++i) { c.digital_clk(); }
     };
 
     auto state_of = [&](::fast_io::u8string_view port_name) noexcept -> ::phy_engine::model::digital_node_statement_t

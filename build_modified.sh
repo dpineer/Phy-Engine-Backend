@@ -4,7 +4,7 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 ENGINE_DIR="$ROOT_DIR"
-OUT_DIR="/wasm32-emscripten-pe-release"
+OUT_DIR="./wasm32-emscripten-pe-release"
 
 mkdir -p "$OUT_DIR"
 export EM_CACHE="${EM_CACHE:-$ROOT_DIR/.cache/emscripten}"
@@ -34,7 +34,7 @@ node - <<'NODE'
 import { readFileSync, writeFileSync } from "node:fs";
 import path from "node:path";
 
-const file = "/wasm32-emscripten-pe-release/phy_engine.js";
+const file = "./wasm32-emscripten-pe-release/phy_engine.js";
 let s = readFileSync(file, "utf8");
 
 const needle = "HEAPU64=new BigUint64Array(b)}";

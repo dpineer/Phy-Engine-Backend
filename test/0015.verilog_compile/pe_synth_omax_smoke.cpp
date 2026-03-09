@@ -85,7 +85,7 @@ endmodule
 
     ::std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -166,7 +166,7 @@ endmodule
 
     auto settle = [&]() noexcept
     {
-        for(std::size_t i{}; i < 4u; ++i) { c.digital_clk(); }
+        for(std::size_t i = 0; i < 4u; ++i) { c.digital_clk(); }
     };
 
     auto read_out = [&](::fast_io::u8string_view nm) noexcept -> std::optional<bool>

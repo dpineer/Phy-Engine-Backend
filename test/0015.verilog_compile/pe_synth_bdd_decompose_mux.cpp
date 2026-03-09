@@ -143,7 +143,7 @@ std::optional<run_result> run_once(::fast_io::u8string_view src, std::uint8_t op
 
     auto settle = [&]() noexcept
     {
-        for(std::size_t i{}; i < 4u; ++i) { c.digital_clk(); }
+        for(std::size_t i = 0; i < 4u; ++i) { c.digital_clk(); }
     };
 
     auto read_out = [&](::fast_io::u8string_view nm) noexcept -> std::optional<bool>

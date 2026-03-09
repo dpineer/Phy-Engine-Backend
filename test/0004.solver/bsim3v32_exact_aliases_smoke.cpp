@@ -66,7 +66,7 @@ int main()
         {"Cgb", "cgb", 3e-12},
     };
 
-    for(std::size_t i{}; i < (sizeof(pairs) / sizeof(pairs[0])); ++i)
+    for(std::size_t i = 0; i < (sizeof(pairs) / sizeof(pairs[0])); ++i)
     {
         auto const idx_c = find_attr_exact(m1, pairs[i].canonical);
         auto const idx_a = find_attr_exact(m1, pairs[i].alias);

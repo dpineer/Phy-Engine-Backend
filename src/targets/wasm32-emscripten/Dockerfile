@@ -2,7 +2,7 @@ FROM emscripten/emsdk:4.0.22
 
 WORKDIR /app
 
-COPY ../../../ .
+COPY . .
 
 WORKDIR /app/src/targets/wasm32-emscripten
 # TODO: fix permissions

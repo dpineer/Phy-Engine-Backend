@@ -46,7 +46,7 @@ int main()
         assert(m != nullptr);
         assert(m->ptr != nullptr);
         auto pv = m->ptr->generate_pin_view();
-        for(std::size_t i{}; i < pv.size; ++i)
+        for(std::size_t i = 0; i < pv.size; ++i)
         {
             auto& n = netlist::create_node(nl);
             bool ok = netlist::add_to_node(nl, *m, i, n);

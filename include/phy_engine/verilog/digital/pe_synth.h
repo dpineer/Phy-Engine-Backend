@@ -305,7 +305,7 @@ namespace phy_engine::verilog::digital
             auto h = 1469598103934665603ull;
             auto mix = [&](::fast_io::u8string_view s) noexcept
             {
-                for(std::size_t i{}; i < s.size(); ++i)
+                for(std::size_t i = 0; i < s.size(); ++i)
                 {
                     h ^= static_cast<unsigned char>(s.data()[i]);
                     h *= 1099511628211ull;
@@ -596,7 +596,7 @@ namespace phy_engine::verilog::digital
             {
                 auto mix = [](std::size_t h, std::size_t v) noexcept -> std::size_t { return (h ^ (v + 0x9e3779b97f4a7c15ull + (h << 6) + (h >> 2))); };
                 std::size_t h{};
-                for(std::size_t i{}; i < s.size(); ++i) { h = mix(h, static_cast<unsigned char>(reinterpret_cast<char const*>(s.data())[i])); }
+                for(std::size_t i = 0; i < s.size(); ++i) { h = mix(h, static_cast<unsigned char>(reinterpret_cast<char const*>(s.data())[i])); }
                 return h;
             }
         };
@@ -904,7 +904,7 @@ namespace phy_engine::verilog::digital
                 ::std::unordered_map<::phy_engine::model::node_t*, bool> as_cand{};
                 as_ref.reserve(in_names.size() * 2u + 8u);
                 as_cand.reserve(in_names.size() * 2u + 8u);
-                for(std::size_t i{}; i < in_names.size(); ++i)
+                for(std::size_t i = 0; i < in_names.size(); ++i)
                 {
                     auto const nm = in_names[i];
                     bool const bit = assign_fn(i);
@@ -1113,7 +1113,7 @@ namespace phy_engine::verilog::digital
                 }
 
                 // generic pin accounting for non-gates (so fanout is correct)
-                for(std::size_t i{}; i < pv.size; ++i)
+                for(std::size_t i = 0; i < pv.size; ++i)
                 {
                     // Best-effort: for most models output pins are later; but unknown => treat as consumer.
                     // (This only affects whether we delete a gate; safe because false positives reduce optimization.)
@@ -1452,7 +1452,7 @@ namespace phy_engine::verilog::digital
                     if(mb->type != ::phy_engine::model::model_type::normal || mb->ptr == nullptr) { continue; }
                     auto const name = model_name_u8(*mb);
                     auto pv = mb->ptr->generate_pin_view();
-                    for(std::size_t i{}; i < pv.size; ++i)
+                    for(std::size_t i = 0; i < pv.size; ++i)
                     {
                         auto* n = pv.pins[i].nodes;
                         if(n == nullptr) { continue; }
@@ -1629,7 +1629,7 @@ namespace phy_engine::verilog::digital
                         auto it = named_input_name.find(n);
                         if(it == named_input_name.end()) { return {}; }
                         auto const full = it->second;
-                        for(std::size_t i{}; i < full.size(); ++i)
+                        for(std::size_t i = 0; i < full.size(); ++i)
                         {
                             if(full[i] == u8'[') { return ::fast_io::u8string_view{full.data(), i}; }
                         }
@@ -1728,7 +1728,7 @@ namespace phy_engine::verilog::digital
                 return false;
             };
 
-            for(std::size_t i{}; i < gates.size(); ++i) { (void)try_make_mul2(i); }
+            for(std::size_t i = 0; i < gates.size(); ++i) { (void)try_make_mul2(i); }
         }
 
         inline bool is_output_pin(::fast_io::u8string_view model_name, std::size_t pin_idx, std::size_t pin_count) noexcept
@@ -1779,7 +1779,7 @@ namespace phy_engine::verilog::digital
                     if(m->type != ::phy_engine::model::model_type::normal || m->ptr == nullptr) { continue; }
                     auto const name = model_name_u8(*m);
                     auto pv = m->ptr->generate_pin_view();
-                    for(std::size_t i{}; i < pv.size; ++i) { pin_out.emplace(__builtin_addressof(pv.pins[i]), is_output_pin(name, i, pv.size)); }
+                    for(std::size_t i = 0; i < pv.size; ++i) { pin_out.emplace(__builtin_addressof(pv.pins[i]), is_output_pin(name, i, pv.size)); }
                 }
             }
 
@@ -2700,7 +2700,7 @@ namespace phy_engine::verilog::digital
                     if(m->type != ::phy_engine::model::model_type::normal || m->ptr == nullptr) { continue; }
                     auto const name = model_name_u8(*m);
                     auto pv = m->ptr->generate_pin_view();
-                    for(std::size_t i{}; i < pv.size; ++i)
+                    for(std::size_t i = 0; i < pv.size; ++i)
                     {
                         auto const* p = __builtin_addressof(pv.pins[i]);
                         bool const is_out = is_output_pin(name, i, pv.size);
@@ -6269,7 +6269,7 @@ namespace phy_engine::verilog::digital
                 for(std::size_t m{}; m < U; ++m)
                 {
                     bool args[4]{};
-                    for(std::size_t i{}; i < inputs && i < 4; ++i) { args[i] = ((m >> i) & 1u) != 0u; }
+                    for(std::size_t i = 0; i < inputs && i < 4; ++i) { args[i] = ((m >> i) & 1u) != 0u; }
                     if(fn(args)) { mask |= (1ull << m); }
                 }
                 return mask;
@@ -6373,7 +6373,7 @@ namespace phy_engine::verilog::digital
 
                 ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
                 leaf_index.reserve(n * 2u);
-                for(std::size_t i{}; i < n; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
+                for(std::size_t i = 0; i < n; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
 
                 cuda_u64_cone_desc cone{};
                 cone.var_count = static_cast<::std::uint8_t>(n);
@@ -6439,7 +6439,7 @@ namespace phy_engine::verilog::digital
                 auto const n = leaves.size();
                 if(n == 0 || n > 4u) { return ::std::nullopt; }
                 ::std::array<unsigned, 4> base_perm{};
-                for(std::size_t i{}; i < n; ++i) { base_perm[i] = static_cast<unsigned>(i); }
+                for(std::size_t i = 0; i < n; ++i) { base_perm[i] = static_cast<unsigned>(i); }
 
                 auto make_variant = [&](pattern const& pat, ::std::array<unsigned, 4> const& perm, ::std::uint32_t neg_mask) noexcept -> ::std::uint64_t
                 {
@@ -6448,7 +6448,7 @@ namespace phy_engine::verilog::digital
                     for(std::size_t m{}; m < U; ++m)
                     {
                         std::size_t p_m{};
-                        for(std::size_t i{}; i < n; ++i)
+                        for(std::size_t i = 0; i < n; ++i)
                         {
                             bool bit = ((m >> perm[i]) & 1u) != 0u;
                             if((neg_mask >> i) & 1u) { bit = !bit; }
@@ -6901,9 +6901,9 @@ namespace phy_engine::verilog::digital
                     if(!used_cuda)
                     {
                         PHY_ENGINE_OMP_PARALLEL_FOR(if(cones.size() >= 256u) schedule(static))
-                        for(std::size_t i{}; i < cones.size(); ++i) { masks[i] = eval_u64_cone_cpu(cones[i]); }
+                        for(std::size_t i = 0; i < cones.size(); ++i) { masks[i] = eval_u64_cone_cpu(cones[i]); }
                     }
-                    for(std::size_t i{}; i < mask_tasks.size() && i < masks.size(); ++i) { mask_tasks[i].mask = masks[i]; }
+                    for(std::size_t i = 0; i < mask_tasks.size() && i < masks.size(); ++i) { mask_tasks[i].mask = masks[i]; }
                 }
 
                 bool ok{true};
@@ -6996,7 +6996,7 @@ namespace phy_engine::verilog::digital
                     auto const& pat = patterns[ch.pattern_idx];
 
                     ::std::array<::phy_engine::model::node_t*, 4> ins{};
-                    for(std::size_t i{}; i < ch.inputs; ++i)
+                    for(std::size_t i = 0; i < ch.inputs; ++i)
                     {
                         auto idx = static_cast<std::size_t>(ch.perm[i]);
                         if(idx >= ch.leaves.size()) { return nullptr; }
@@ -7534,7 +7534,7 @@ namespace phy_engine::verilog::digital
             auto tt_all_one = [](std::vector<std::uint64_t> const& tt, std::uint64_t last_mask) noexcept -> bool
             {
                 if(tt.empty()) { return false; }
-                for(std::size_t i{}; i + 1 < tt.size(); ++i)
+                for(std::size_t i = 0; i + 1 < tt.size(); ++i)
                 {
                     if(tt[i] != ~0ull) { return false; }
                 }
@@ -7613,7 +7613,7 @@ namespace phy_engine::verilog::digital
             if(!used_cuda)
             {
                 PHY_ENGINE_OMP_PARALLEL_FOR(if(descs.size() >= 32u) schedule(static))
-                for(std::size_t i{}; i < descs.size(); ++i)
+                for(std::size_t i = 0; i < descs.size(); ++i)
                 {
                     eval_tt_cone_cpu(descs[i], stride_blocks, tt_words.data() + i * static_cast<std::size_t>(stride_blocks));
                 }
@@ -7649,7 +7649,7 @@ namespace phy_engine::verilog::digital
                     for(std::size_t m{}; m < UU; ++m)
                     {
                         std::size_t old_idx{};
-                        for(std::size_t i{}; i < var_count; ++i)
+                        for(std::size_t i = 0; i < var_count; ++i)
                         {
                             unsigned const ov = perm[i];
                             bool const bit = ((m >> i) & 1u) != 0u;
@@ -7676,7 +7676,7 @@ namespace phy_engine::verilog::digital
                         auto const step = static_cast<std::size_t>(1u << v);
                         for(std::size_t base{}; base < U; base += (step << 1u))
                         {
-                            for(std::size_t i{}; i < step; ++i)
+                            for(std::size_t i = 0; i < step; ++i)
                             {
                                 auto const a = base + i;
                                 auto const b = a + step;
@@ -7757,7 +7757,7 @@ namespace phy_engine::verilog::digital
                         auto const half = bits_n / 2u;
                         ::std::vector<std::uint64_t> t0((half + 63u) / 64u, 0ull);
                         ::std::vector<std::uint64_t> t1((half + 63u) / 64u, 0ull);
-                        for(std::size_t i{}; i < half; ++i)
+                        for(std::size_t i = 0; i < half; ++i)
                         {
                             if(tt_get_bit(tt, 2u * i)) { tt_set_bit(t0, i); }
                             if(tt_get_bit(tt, 2u * i + 1u)) { tt_set_bit(t1, i); }
@@ -7794,7 +7794,7 @@ namespace phy_engine::verilog::digital
                 auto is_ident_perm = [&](::std::vector<unsigned> const& p) noexcept -> bool
                 {
                     if(p.size() != var_count) { return false; }
-                    for(std::size_t i{}; i < p.size(); ++i)
+                    for(std::size_t i = 0; i < p.size(); ++i)
                     {
                         if(p[i] != i) { return false; }
                     }
@@ -7856,7 +7856,7 @@ namespace phy_engine::verilog::digital
                 {
                     // var_count is <= 16, so 4 bits per entry is enough.
                     ::std::uint64_t k = static_cast<::std::uint64_t>(p.size());
-                    for(std::size_t i{}; i < p.size() && i < 16u; ++i) { k ^= (static_cast<::std::uint64_t>(p[i] & 0xFu) << (4u * i)); }
+                    for(std::size_t i = 0; i < p.size() && i < 16u; ++i) { k ^= (static_cast<::std::uint64_t>(p[i] & 0xFu) << (4u * i)); }
                     return k;
                 };
                 for(auto& p: perms)
@@ -7901,7 +7901,7 @@ namespace phy_engine::verilog::digital
                 if(root_id == static_cast<std::uint32_t>(-1) || bdd.size() < 2u) { continue; }
                 ::std::vector<::phy_engine::model::node_t*> leaves_ord{};
                 leaves_ord.reserve(var_count);
-                for(std::size_t i{}; i < best_perm.size(); ++i)
+                for(std::size_t i = 0; i < best_perm.size(); ++i)
                 {
                     auto const old = static_cast<std::size_t>(best_perm[i]);
                     if(old >= c.leaves.size())
@@ -8580,13 +8580,13 @@ namespace phy_engine::verilog::digital
                 if(!used_cuda)
                 {
                     PHY_ENGINE_OMP_PARALLEL_FOR(if(cands.size() >= 32u) schedule(static))
-                    for(std::size_t i{}; i < cands.size(); ++i)
+                    for(std::size_t i = 0; i < cands.size(); ++i)
                     {
                         eval_tt_cone_cpu(cones[i], stride_blocks, tt_words.data() + i * static_cast<std::size_t>(stride_blocks));
                     }
                 }
 
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     auto const* base = tt_words.data() + i * static_cast<std::size_t>(stride_blocks);
                     auto const blocks = cands[i].blocks;
@@ -8640,7 +8640,7 @@ namespace phy_engine::verilog::digital
                 };
 
                 bool changed{};
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     auto& cd = cands[i];
                     if(!cd.ok) { continue; }
@@ -8981,7 +8981,7 @@ namespace phy_engine::verilog::digital
 
                 ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
                 leaf_index.reserve(var_count * 2u + 8u);
-                for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
+                for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
 
                 cuda_u64_cone_desc cone{};
                 cone.var_count = static_cast<::std::uint8_t>(var_count);
@@ -9099,7 +9099,7 @@ namespace phy_engine::verilog::digital
                 ::std::vector<std::size_t> map_idx{};
                 cones.reserve(cands.size());
                 map_idx.reserve(cands.size());
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     if(!cands[i].ok) { continue; }
                     cones.push_back(cands[i].cone);
@@ -9110,7 +9110,7 @@ namespace phy_engine::verilog::digital
                 if(!cones.empty() && cuda_eval_u64_cones(opt.cuda_device_mask, cones.data(), cones.size(), masks.data()))
                 {
                     used_cuda = true;
-                    for(std::size_t i{}; i < map_idx.size(); ++i) { cands[map_idx[i]].mask = masks[i]; }
+                    for(std::size_t i = 0; i < map_idx.size(); ++i) { cands[map_idx[i]].mask = masks[i]; }
                 }
             }
             if(!used_cuda)
@@ -9534,13 +9534,13 @@ namespace phy_engine::verilog::digital
                 if(!used_cuda)
                 {
                     PHY_ENGINE_OMP_PARALLEL_FOR(if(cands.size() >= 32u) schedule(static))
-                    for(std::size_t i{}; i < cands.size(); ++i)
+                    for(std::size_t i = 0; i < cands.size(); ++i)
                     {
                         eval_tt_cone_cpu(cones[i], stride_blocks, tt_words.data() + i * static_cast<std::size_t>(stride_blocks));
                     }
                 }
 
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     auto const* base = tt_words.data() + i * static_cast<std::size_t>(stride_blocks);
                     cands[i].sig = sig_tt(base, cands[i].blocks);
@@ -9581,7 +9581,7 @@ namespace phy_engine::verilog::digital
                 rep.reserve(cands.size() * 2u + 1u);
 
                 bool changed{};
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     auto& cd = cands[i];
                     if(!cd.ok) { continue; }
@@ -9937,7 +9937,7 @@ namespace phy_engine::verilog::digital
 
                 ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
                 leaf_index.reserve(var_count * 2u + 8u);
-                for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
+                for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
 
                 cuda_u64_cone_desc cone{};
                 cone.var_count = static_cast<::std::uint8_t>(var_count);
@@ -10053,7 +10053,7 @@ namespace phy_engine::verilog::digital
                 ::std::vector<std::size_t> map_idx{};
                 cones.reserve(cands.size());
                 map_idx.reserve(cands.size());
-                for(std::size_t i{}; i < cands.size(); ++i)
+                for(std::size_t i = 0; i < cands.size(); ++i)
                 {
                     if(!cands[i].ok) { continue; }
                     cones.push_back(cands[i].cone);
@@ -10064,7 +10064,7 @@ namespace phy_engine::verilog::digital
                 if(!cones.empty() && cuda_eval_u64_cones(opt.cuda_device_mask, cones.data(), cones.size(), masks.data()))
                 {
                     used_cuda = true;
-                    for(std::size_t i{}; i < map_idx.size(); ++i) { cands[map_idx[i]].mask = masks[i]; }
+                    for(std::size_t i = 0; i < map_idx.size(); ++i) { cands[map_idx[i]].mask = masks[i]; }
                 }
             }
             if(!used_cuda)
@@ -10172,7 +10172,7 @@ namespace phy_engine::verilog::digital
                     auto pv = mb.ptr->generate_pin_view();
                     bool any_out{};
                     bool all_unused{true};
-                    for(std::size_t i{}; i < pv.size; ++i)
+                    for(std::size_t i = 0; i < pv.size; ++i)
                     {
                         if(!is_output_pin(name, i, pv.size)) { continue; }
                         any_out = true;
@@ -10242,7 +10242,7 @@ namespace phy_engine::verilog::digital
                 ::std::vector<qm_implicant> next{};
                 next.reserve(current.size());
 
-                for(std::size_t i{}; i < current.size(); ++i)
+                for(std::size_t i = 0; i < current.size(); ++i)
                 {
                     for(std::size_t j{i + 1}; j < current.size(); ++j)
                     {
@@ -10507,7 +10507,7 @@ namespace phy_engine::verilog::digital
             sol.covers.resize(outputs);
 
             // Quick constant handling.
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 if(on_list[o].empty()) { sol.covers[o].clear(); }
             }
@@ -10516,8 +10516,8 @@ namespace phy_engine::verilog::digital
             ::std::vector<::std::vector<qm_implicant>> primes_by_out{};
             primes_by_out.resize(outputs);
             PHY_ENGINE_OMP_PARALLEL_FOR(if(outputs >= 2u) schedule(static))
-            for(std::size_t o{}; o < outputs; ++o) { primes_by_out[o] = qm_prime_implicants(on_list[o], dc_list[o], var_count); }
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o) { primes_by_out[o] = qm_prime_implicants(on_list[o], dc_list[o], var_count); }
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 if(primes_by_out[o].empty() && !on_list[o].empty()) { return sol; }
             }
@@ -10528,7 +10528,7 @@ namespace phy_engine::verilog::digital
             ::std::vector<qm_implicant> cubes{};
             cubes.reserve(512);
 
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 for(auto const& imp: primes_by_out[o])
                 {
@@ -10548,7 +10548,7 @@ namespace phy_engine::verilog::digital
             is_on_full.resize(outputs);
             is_dc_full.resize(outputs);
             PHY_ENGINE_OMP_PARALLEL_FOR(if(outputs >= 2u) schedule(static))
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 is_on_full[o].assign(full_U, false);
                 is_dc_full[o].assign(full_U, false);
@@ -10567,7 +10567,7 @@ namespace phy_engine::verilog::digital
             blocks_by_out.resize(outputs);
             ::std::vector<::std::vector<::std::uint64_t>> cov{};
             cov.resize(outputs);
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 auto const blocks = (on_list[o].size() + 63u) / 64u;
                 blocks_by_out[o] = blocks;
@@ -10599,7 +10599,7 @@ namespace phy_engine::verilog::digital
             // Uncovered sets per output.
             ::std::vector<::std::vector<std::uint64_t>> uncovered{};
             uncovered.resize(outputs);
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 auto const blocks = (on_list[o].size() + 63u) / 64u;
                 uncovered[o].assign(blocks, ~0ull);
@@ -10632,7 +10632,7 @@ namespace phy_engine::verilog::digital
 
             auto any_uncovered = [&]() noexcept -> bool
             {
-                for(std::size_t o{}; o < outputs; ++o)
+                for(std::size_t o = 0; o < outputs; ++o)
                 {
                     for(auto const w: uncovered[o])
                     {
@@ -10651,7 +10651,7 @@ namespace phy_engine::verilog::digital
             use_cuda_gains.assign(outputs, false);
             if(!opt.cuda_enable && !cubes.empty())
             {
-                for(std::size_t o{}; o < outputs; ++o)
+                for(std::size_t o = 0; o < outputs; ++o)
                 {
                     auto const blocks = blocks_by_out[o];
                     if(blocks == 0u) { continue; }
@@ -10660,7 +10660,7 @@ namespace phy_engine::verilog::digital
             }
             else if(opt.cuda_enable && !cubes.empty())
             {
-                for(std::size_t o{}; o < outputs; ++o)
+                for(std::size_t o = 0; o < outputs; ++o)
                 {
                     auto const blocks = blocks_by_out[o];
                     if(blocks == 0u) { continue; }
@@ -10681,7 +10681,7 @@ namespace phy_engine::verilog::digital
 
             while(any_uncovered())
             {
-                for(std::size_t o{}; o < outputs; ++o)
+                for(std::size_t o = 0; o < outputs; ++o)
                 {
                     if(!use_cuda_gains[o]) { continue; }
                     auto const blocks = blocks_by_out[o];
@@ -10703,7 +10703,7 @@ namespace phy_engine::verilog::digital
                     std::size_t gain{};
                     ::std::vector<bool> hits{};
                     hits.assign(outputs, false);
-                    for(std::size_t o{}; o < outputs; ++o)
+                    for(std::size_t o = 0; o < outputs; ++o)
                     {
                         std::size_t og{};
                         auto const blocks = blocks_by_out[o];
@@ -10730,7 +10730,7 @@ namespace phy_engine::verilog::digital
                     auto const not_incr = static_cast<std::size_t>(__builtin_popcount(static_cast<unsigned>(new_neg)));
 
                     std::size_t or_incr{};
-                    for(std::size_t o{}; o < outputs; ++o)
+                    for(std::size_t o = 0; o < outputs; ++o)
                     {
                         if(!hits[o]) { continue; }
                         if(terms_count[o] >= 1u) { ++or_incr; }
@@ -10754,7 +10754,7 @@ namespace phy_engine::verilog::digital
                 selected[best_ci] = true;
                 neg_mask_used = static_cast<std::uint16_t>(neg_mask_used | cube_neg_mask(cubes[best_ci]));
 
-                for(std::size_t o{}; o < outputs; ++o)
+                for(std::size_t o = 0; o < outputs; ++o)
                 {
                     bool contributed{};
                     auto const blocks = blocks_by_out[o];
@@ -10774,7 +10774,7 @@ namespace phy_engine::verilog::digital
             }
 
             // Build covers per output and prune redundancies (per-output irredundant).
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 auto const& on = on_list[o];
                 if(on.empty())
@@ -10809,7 +10809,7 @@ namespace phy_engine::verilog::digital
                     }
                 }
 
-                for(std::size_t i{}; i < picks.size();)
+                for(std::size_t i = 0; i < picks.size();)
                 {
                     auto const ci = picks[i];
                     bool redundant{true};
@@ -10865,7 +10865,7 @@ namespace phy_engine::verilog::digital
             }
 
             // Validate (best-effort): cover each ON and do not hit OFF (implicit, since cubes come from primes).
-            for(std::size_t o{}; o < outputs; ++o)
+            for(std::size_t o = 0; o < outputs; ++o)
             {
                 if(!two_level_cover_covers_all_on(sol.covers[o], on_list[o])) { return multi_output_solution{}; }
             }
@@ -11110,7 +11110,7 @@ namespace phy_engine::verilog::digital
                     {
                         ::std::vector<cuda_cube_desc> desc{};
                         desc.resize(cubes.size());
-                        for(std::size_t i{}; i < cubes.size(); ++i)
+                        for(std::size_t i = 0; i < cubes.size(); ++i)
                         {
                             desc[i].value = cubes[i].value;
                             desc[i].mask = cubes[i].mask;
@@ -11139,7 +11139,7 @@ namespace phy_engine::verilog::digital
 
                 if(used_cuda) { return; }
                 PHY_ENGINE_OMP_PARALLEL_FOR(if(cubes.size() >= 256u) schedule(static))
-                for(std::size_t i{}; i < cubes.size(); ++i) { out_hits[i] = cube_hits_off_fast(cubes[i]) ? 1u : 0u; }
+                for(std::size_t i = 0; i < cubes.size(); ++i) { out_hits[i] = cube_hits_off_fast(cubes[i]) ? 1u : 0u; }
             };
 
             auto cube_hits_off = [&](qm_implicant const& c) noexcept -> bool { return cube_hits_off_fast(c); };
@@ -11188,20 +11188,20 @@ namespace phy_engine::verilog::digital
                 {
                     ::std::vector<cuda_cube_desc> desc{};
                     desc.resize(cover.size());
-                    for(std::size_t i{}; i < cover.size(); ++i)
+                    for(std::size_t i = 0; i < cover.size(); ++i)
                     {
                         desc[i].value = cover[i].value;
                         desc[i].mask = cover[i].mask;
                     }
                     ::std::vector<std::uint8_t> vars{};
                     vars.reserve(var_limit_gpu);
-                    for(std::size_t i{}; i < var_limit_gpu; ++i) { vars.push_back(static_cast<std::uint8_t>(var_order[i])); }
+                    for(std::size_t i = 0; i < var_limit_gpu; ++i) { vars.push_back(static_cast<std::uint8_t>(var_order[i])); }
 
                     bool const ok =
                         cuda_espresso_off_expand_best(off_gpu, desc.data(), desc.size(), vars.data(), static_cast<::std::uint32_t>(vars.size()), max_rounds);
                     if(ok)
                     {
-                        for(std::size_t i{}; i < cover.size(); ++i)
+                        for(std::size_t i = 0; i < cover.size(); ++i)
                         {
                             if(cover[i].mask != desc[i].mask || cover[i].value != desc[i].value)
                             {
@@ -11256,7 +11256,7 @@ namespace phy_engine::verilog::digital
                             cands.push_back(cand);
                         }
 
-                        for(std::size_t i{}; i < bits.size(); ++i)
+                        for(std::size_t i = 0; i < bits.size(); ++i)
                         {
                             for(std::size_t j{i + 1u}; j < bits.size(); ++j)
                             {
@@ -11280,7 +11280,7 @@ namespace phy_engine::verilog::digital
                     best.assign(cover.size(), -1);
                     best_drop.assign(cover.size(), 0u);
 
-                    for(std::size_t k{}; k < cands.size(); ++k)
+                    for(std::size_t k = 0; k < cands.size(); ++k)
                     {
                         if(hits[k]) { continue; }
                         auto const ci = meta[k].cube_idx;
@@ -11341,7 +11341,7 @@ namespace phy_engine::verilog::digital
                 prefix.assign(blocksU, 0ull);
 
                 bool changed{};
-                for(std::size_t i{}; i < cover.size();)
+                for(std::size_t i = 0; i < cover.size();)
                 {
                     auto const c = cover[i];
                     auto const* suf = row_ptrc(suffix_or, i + 1u);
@@ -11444,7 +11444,7 @@ namespace phy_engine::verilog::digital
                 auto const n = cover.size();
                 ::std::vector<::std::uint64_t> cov_bits{};
                 cov_bits.assign(n * blocksU, 0ull);
-                for(std::size_t i{}; i < n; ++i)
+                for(std::size_t i = 0; i < n; ++i)
                 {
                     auto* dst = row_ptr(cov_bits, i);
                     for(std::uint32_t w{}; w < static_cast<std::uint32_t>(blocksU); ++w) { dst[w] = cube_cover_word(cover[i], w) & on_bits[w]; }
@@ -11466,7 +11466,7 @@ namespace phy_engine::verilog::digital
                 ::std::vector<::std::uint64_t> unique{};
                 unique.assign(blocksU, 0ull);
 
-                for(std::size_t i{}; i < n; ++i)
+                for(std::size_t i = 0; i < n; ++i)
                 {
                     auto* row = row_ptr(cov_bits, i);
                     auto const* suf = row_ptrc(suffix_or, i + 1u);
@@ -11605,7 +11605,7 @@ namespace phy_engine::verilog::digital
                     cover[idx].mask = 0u;
                     cover[idx].value = *anchor;
 
-                    for(std::size_t i{}; i < 4u; ++i)
+                    for(std::size_t i = 0; i < 4u; ++i)
                     {
                         step_expand();
                         step_reduce();
@@ -12048,11 +12048,11 @@ namespace phy_engine::verilog::digital
                 // Dominance pruning by subset + cost.
                 ::std::vector<std::size_t> cost{};
                 cost.resize(next.size());
-                for(std::size_t i{}; i < next.size(); ++i) { cost[i] = bit_cost(next[i]); }
+                for(std::size_t i = 0; i < next.size(); ++i) { cost[i] = bit_cost(next[i]); }
 
                 ::std::vector<bool> drop{};
                 drop.assign(next.size(), false);
-                for(std::size_t i{}; i < next.size(); ++i)
+                for(std::size_t i = 0; i < next.size(); ++i)
                 {
                     if(drop[i]) { continue; }
                     for(std::size_t j{i + 1}; j < next.size(); ++j)
@@ -12077,7 +12077,7 @@ namespace phy_engine::verilog::digital
 
                 ::std::vector<std::uint64_t> pruned{};
                 pruned.reserve(next.size());
-                for(std::size_t i{}; i < next.size(); ++i)
+                for(std::size_t i = 0; i < next.size(); ++i)
                 {
                     if(!drop[i]) { pruned.push_back(next[i]); }
                 }
@@ -12154,7 +12154,7 @@ namespace phy_engine::verilog::digital
                     {
                         ::std::vector<cuda_cube_desc> cubes{};
                         cubes.resize(primes.size());
-                        for(std::size_t i{}; i < primes.size(); ++i)
+                        for(std::size_t i = 0; i < primes.size(); ++i)
                         {
                             cubes[i].value = primes[i].value;
                             cubes[i].mask = primes[i].mask;
@@ -12311,7 +12311,7 @@ namespace phy_engine::verilog::digital
                         // Optional: let the GPU pick the best remaining prime directly (reduces CPU scan time).
                         // Costs are uploaded once per matrix.
                         cost_u32.resize(primes.size());
-                        for(std::size_t i{}; i < primes.size(); ++i)
+                        for(std::size_t i = 0; i < primes.size(); ++i)
                         {
                             auto const c = prime_cost[i];
                             cost_u32[i] = static_cast<::std::uint32_t>(c > 0xFFFFFFFFull ? 0xFFFFFFFFu : c);
@@ -12487,7 +12487,7 @@ namespace phy_engine::verilog::digital
                     std::size_t best2_cost = best_cost;
                     std::int64_t best2_combined = ::std::numeric_limits<std::int64_t>::min();
 
-                    for(std::size_t i{}; i < k; ++i)
+                    for(std::size_t i = 0; i < k; ++i)
                     {
                         auto const p = cands[i].pi;
                         auto const* pr = cov_row_c(p);
@@ -12568,7 +12568,7 @@ namespace phy_engine::verilog::digital
 
                 for(auto const pi: sol.pick) { add_counts(pi); }
 
-                for(std::size_t i{}; i < sol.pick.size();)
+                for(std::size_t i = 0; i < sol.pick.size();)
                 {
                     auto const pi = sol.pick[i];
                     ::std::vector<::std::uint64_t> tmp_row{};
@@ -12796,7 +12796,7 @@ namespace phy_engine::verilog::digital
                     for(auto* n: g.nodes)
                     {
                         std::size_t idx = SIZE_MAX;
-                        for(std::size_t i{}; i < leaves.size(); ++i)
+                        for(std::size_t i = 0; i < leaves.size(); ++i)
                         {
                             if(leaves[i] == n)
                             {
@@ -13043,7 +13043,7 @@ namespace phy_engine::verilog::digital
                     cone.gate_count = 0u;
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
                     leaf_index.reserve(var_count * 2u);
-                    for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
+                    for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint8_t>(i)); }
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> out_index{};
                     out_index.reserve(128);
                     bool ok2{true};
@@ -13127,7 +13127,7 @@ namespace phy_engine::verilog::digital
                 cone.gate_count = 0u;
                 ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> leaf_index{};
                 leaf_index.reserve(var_count * 2u);
-                for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint16_t>(i)); }
+                for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(leaves[i], static_cast<::std::uint16_t>(i)); }
                 ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> out_index{};
                 out_index.reserve(256);
                 bool ok2{true};
@@ -13486,7 +13486,7 @@ namespace phy_engine::verilog::digital
 
 	                        ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
 	                        leaf_index.reserve(var_count * 2u);
-	                        for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(cc.leaves[i], static_cast<::std::uint8_t>(i)); }
+	                        for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(cc.leaves[i], static_cast<::std::uint8_t>(i)); }
 	                        ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> out_index{};
 	                        out_index.reserve(128);
 	                        ::std::unordered_map<::phy_engine::model::node_t*, bool> visiting{};
@@ -13562,7 +13562,7 @@ namespace phy_engine::verilog::digital
 
 	                        ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> leaf_index{};
 	                        leaf_index.reserve(var_count * 2u);
-	                        for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(cc.leaves[i], static_cast<::std::uint16_t>(i)); }
+	                        for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(cc.leaves[i], static_cast<::std::uint16_t>(i)); }
 	                        ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> out_index{};
 	                        out_index.reserve(256);
 	                        ::std::unordered_map<::phy_engine::model::node_t*, bool> visiting{};
@@ -13681,10 +13681,10 @@ namespace phy_engine::verilog::digital
                         if(!used_cuda)
                         {
                             PHY_ENGINE_OMP_PARALLEL_FOR(if(descs.size() >= 256u) schedule(static))
-                            for(std::size_t i{}; i < descs.size(); ++i) { masks[i] = eval_u64_cone_cpu(descs[i]); }
+                            for(std::size_t i = 0; i < descs.size(); ++i) { masks[i] = eval_u64_cone_cpu(descs[i]); }
                         }
 
-                        for(std::size_t i{}; i < u64_jobs.size(); ++i)
+                        for(std::size_t i = 0; i < u64_jobs.size(); ++i)
                         {
                             auto* cc = u64_jobs[i].c;
                             auto const var_count = cc->leaves.size();
@@ -13704,7 +13704,7 @@ namespace phy_engine::verilog::digital
                     {
                         ::std::unordered_map<::std::uint32_t, ::std::vector<std::size_t>> by_blocks{};
                         by_blocks.reserve(16);
-                        for(std::size_t i{}; i < tt_jobs.size(); ++i) { by_blocks[tt_jobs[i].blocks].push_back(i); }
+                        for(std::size_t i = 0; i < tt_jobs.size(); ++i) { by_blocks[tt_jobs[i].blocks].push_back(i); }
 
                         for(auto& kv: by_blocks)
                         {
@@ -13724,14 +13724,14 @@ namespace phy_engine::verilog::digital
                             if(!used_cuda)
                             {
                                 PHY_ENGINE_OMP_PARALLEL_FOR(if(descs.size() >= 32u) schedule(static))
-                                for(std::size_t i{}; i < descs.size(); ++i)
+                                for(std::size_t i = 0; i < descs.size(); ++i)
                                 {
                                     eval_tt_cone_cpu(descs[i], blocks, tt.data() + i * static_cast<std::size_t>(blocks));
                                 }
                             }
 
                             // Scatter into cone.on.
-                            for(std::size_t i{}; i < idxs.size(); ++i)
+                            for(std::size_t i = 0; i < idxs.size(); ++i)
                             {
                                 auto* cc = tt_jobs[idxs[i]].c;
                                 auto const var_count = cc->leaves.size();
@@ -13921,7 +13921,7 @@ namespace phy_engine::verilog::digital
                     {
                         std::uint16_t mask = var_mask;
                         std::uint16_t value{};
-                        for(std::size_t i{}; i < count; ++i)
+                        for(std::size_t i = 0; i < count; ++i)
                         {
                             auto const bit = static_cast<std::uint16_t>(1u << lits[i].v);
                             mask = static_cast<std::uint16_t>(mask & static_cast<std::uint16_t>(~bit));
@@ -13935,7 +13935,7 @@ namespace phy_engine::verilog::digital
                         auto const& imp = kv.second;
                         auto lits = cube_lits(imp);
                         if(lits.size() < 2u) { continue; }
-                        for(std::size_t i{}; i + 1 < lits.size(); ++i)
+                        for(std::size_t i = 0; i + 1 < lits.size(); ++i)
                         {
                             for(std::size_t j{i + 1}; j < lits.size(); ++j)
                             {
@@ -13945,7 +13945,7 @@ namespace phy_engine::verilog::digital
                         }
                         if(max_shared_literals >= 3u && lits.size() >= 3u)
                         {
-                            for(std::size_t i{}; i + 2 < lits.size(); ++i)
+                            for(std::size_t i = 0; i + 2 < lits.size(); ++i)
                             {
                                 for(std::size_t j{i + 1}; j + 1 < lits.size(); ++j)
                                 {
@@ -14408,7 +14408,7 @@ namespace phy_engine::verilog::digital
 
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> leaf_index{};
                     leaf_index.reserve(var_count * 2u);
-                    for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(j.leaves[i], static_cast<::std::uint8_t>(i)); }
+                    for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(j.leaves[i], static_cast<::std::uint8_t>(i)); }
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint8_t> out_index{};
                     out_index.reserve(128);
                     ::std::unordered_map<::phy_engine::model::node_t*, bool> visiting{};
@@ -14485,7 +14485,7 @@ namespace phy_engine::verilog::digital
 
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> leaf_index{};
                     leaf_index.reserve(var_count * 2u);
-                    for(std::size_t i{}; i < var_count; ++i) { leaf_index.emplace(j.leaves[i], static_cast<::std::uint16_t>(i)); }
+                    for(std::size_t i = 0; i < var_count; ++i) { leaf_index.emplace(j.leaves[i], static_cast<::std::uint16_t>(i)); }
                     ::std::unordered_map<::phy_engine::model::node_t*, ::std::uint16_t> out_index{};
                     out_index.reserve(256);
                     ::std::unordered_map<::phy_engine::model::node_t*, bool> visiting{};
@@ -14554,7 +14554,7 @@ namespace phy_engine::verilog::digital
                     return true;
                 };
 
-                for(std::size_t i{}; i < batch.size(); ++i)
+                for(std::size_t i = 0; i < batch.size(); ++i)
                 {
                     auto& j = batch[i];
                     j.on.clear();
@@ -14601,10 +14601,10 @@ namespace phy_engine::verilog::digital
                     if(!used_cuda)
                     {
                         PHY_ENGINE_OMP_PARALLEL_FOR(if(descs.size() >= 256u) schedule(static))
-                        for(std::size_t k{}; k < descs.size(); ++k) { masks[k] = eval_u64_cone_cpu(descs[k]); }
+                        for(std::size_t k = 0; k < descs.size(); ++k) { masks[k] = eval_u64_cone_cpu(descs[k]); }
                     }
 
-                    for(std::size_t k{}; k < u64_jobs.size(); ++k)
+                    for(std::size_t k = 0; k < u64_jobs.size(); ++k)
                     {
                         auto& j = batch[u64_jobs[k].idx];
                         auto const var_count = j.leaves.size();
@@ -14623,7 +14623,7 @@ namespace phy_engine::verilog::digital
                 {
                     ::std::unordered_map<::std::uint32_t, ::std::vector<std::size_t>> by_blocks{};
                     by_blocks.reserve(16);
-                    for(std::size_t i{}; i < tt_jobs.size(); ++i) { by_blocks[tt_jobs[i].blocks].push_back(i); }
+                    for(std::size_t i = 0; i < tt_jobs.size(); ++i) { by_blocks[tt_jobs[i].blocks].push_back(i); }
 
                     for(auto& kv: by_blocks)
                     {
@@ -14643,13 +14643,13 @@ namespace phy_engine::verilog::digital
                         if(!used_cuda)
                         {
                             PHY_ENGINE_OMP_PARALLEL_FOR(if(descs.size() >= 32u) schedule(static))
-                            for(std::size_t i{}; i < descs.size(); ++i)
+                            for(std::size_t i = 0; i < descs.size(); ++i)
                             {
                                 eval_tt_cone_cpu(descs[i], blocks, tt.data() + i * static_cast<std::size_t>(blocks));
                             }
                         }
 
-                        for(std::size_t i{}; i < idxs.size(); ++i)
+                        for(std::size_t i = 0; i < idxs.size(); ++i)
                         {
                             auto& j = batch[tt_jobs[idxs[i]].idx];
                             auto const var_count = j.leaves.size();
@@ -14683,7 +14683,7 @@ namespace phy_engine::verilog::digital
                         {
                             ::std::unordered_map<::phy_engine::model::node_t*, ::phy_engine::model::digital_node_statement_t> leaf_val{};
                             leaf_val.reserve(j.leaves.size() * 2u);
-                            for(std::size_t i{}; i < j.leaves.size(); ++i)
+                            for(std::size_t i = 0; i < j.leaves.size(); ++i)
                             {
                                 auto const bit = ((m >> i) & 1u) != 0;
                                 leaf_val.emplace(j.leaves[i],
@@ -15525,7 +15525,7 @@ namespace phy_engine::verilog::digital
                         vecs[vec_id].bad = true;
                         return;
                     }
-                    for(std::size_t i{}; i < desc->bits.size(); ++i)
+                    for(std::size_t i = 0; i < desc->bits.size(); ++i)
                     {
                         if(desc->bits.index_unchecked(i) != n.lhs_signals.index_unchecked(i))
                         {
@@ -15535,7 +15535,7 @@ namespace phy_engine::verilog::digital
                     }
 
                     ::std::uint16_t pattern{};
-                    for(std::size_t i{}; i < n.rhs_roots.size(); ++i)
+                    for(std::size_t i = 0; i < n.rhs_roots.size(); ++i)
                     {
                         ::phy_engine::verilog::digital::logic_t v{};
                         if(!eval_const_expr_to_logic(b, n.rhs_roots.index_unchecked(i), v))

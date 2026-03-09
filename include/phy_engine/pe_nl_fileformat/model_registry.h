@@ -119,7 +119,7 @@ namespace phy_engine::pe_nl_fileformat
 
             // Internal node voltages (always 6 slots; only prefix of them may be used).
             details::append_uleb128(out, 6);
-            for(std::size_t i{}; i < 6; ++i)
+            for(std::size_t i = 0; i < 6; ++i)
             {
                 auto const v = impl->m.internal_nodes[i].node_information.an.voltage;
                 details::append_f64(out, v.real());
@@ -155,7 +155,7 @@ namespace phy_engine::pe_nl_fileformat
             st = details::read_uleb128(in, off, n_nodes);
             if(!st) { return st; }
             if(n_nodes != 6) { return {errc::corrupt, "unexpected internal node count for bsim3v32"}; }
-            for(std::size_t i{}; i < 6; ++i)
+            for(std::size_t i = 0; i < 6; ++i)
             {
                 double re{};
                 double im{};
@@ -182,7 +182,7 @@ namespace phy_engine::pe_nl_fileformat
             auto const& cm = *vm.top_instance.mod;
             vm.pin_name_storage.reserve(cm.ports.size());
             vm.pins.reserve(cm.ports.size());
-            for(std::size_t i{}; i < cm.ports.size(); ++i)
+            for(std::size_t i = 0; i < cm.ports.size(); ++i)
             {
                 auto const& p = cm.ports.index_unchecked(i);
                 vm.pin_name_storage.push_back(p.name);
@@ -228,7 +228,7 @@ namespace phy_engine::pe_nl_fileformat
             auto st = details::read_uleb128(in, off, n);
             if(!st) { return st; }
             v.resize(static_cast<std::size_t>(n));
-            for(std::size_t i{}; i < static_cast<std::size_t>(n); ++i)
+            for(std::size_t i = 0; i < static_cast<std::size_t>(n); ++i)
             {
                 if(off >= in.size()) { return {errc::corrupt, "unexpected EOF while reading logic vector"}; }
                 v.index_unchecked(i) = static_cast<::phy_engine::verilog::digital::logic_t>(static_cast<std::uint8_t>(in[off++]));
@@ -309,7 +309,7 @@ namespace phy_engine::pe_nl_fileformat
             rc = details::read_uleb128(in, off, n_events);
             if(!rc) { return rc; }
             st.events.resize(static_cast<std::size_t>(n_events));
-            for(std::size_t i{}; i < static_cast<std::size_t>(n_events); ++i)
+            for(std::size_t i = 0; i < static_cast<std::size_t>(n_events); ++i)
             {
                 rc = read_scheduled_event(in, off, st.events.index_unchecked(i));
                 if(!rc) { return rc; }
@@ -319,7 +319,7 @@ namespace phy_engine::pe_nl_fileformat
             rc = details::read_uleb128(in, off, n_nba);
             if(!rc) { return rc; }
             st.nba_queue.resize(static_cast<std::size_t>(n_nba));
-            for(std::size_t i{}; i < static_cast<std::size_t>(n_nba); ++i)
+            for(std::size_t i = 0; i < static_cast<std::size_t>(n_nba); ++i)
             {
                 std::uint64_t sig{};
                 rc = details::read_trivial(in, off, sig);
@@ -355,7 +355,7 @@ namespace phy_engine::pe_nl_fileformat
             append_module_state(out, inst.state);
 
             details::append_uleb128(out, inst.children.size());
-            for(std::size_t i{}; i < inst.children.size(); ++i)
+            for(std::size_t i = 0; i < inst.children.size(); ++i)
             {
                 auto const& ch = inst.children.index_unchecked(i);
                 details::append_u8(out, ch ? 1u : 0u);
@@ -391,7 +391,7 @@ namespace phy_engine::pe_nl_fileformat
             if(!st) { return st; }
             if(n_children != inst.children.size()) { return {errc::corrupt, "verilog instance child_count mismatch"}; }
 
-            for(std::size_t i{}; i < inst.children.size(); ++i)
+            for(std::size_t i = 0; i < inst.children.size(); ++i)
             {
                 if(off >= in.size()) { return {errc::corrupt, "unexpected EOF reading verilog child present flag"}; }
                 bool const present = static_cast<std::uint8_t>(in[off++]) != 0;

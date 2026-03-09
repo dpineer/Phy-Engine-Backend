@@ -124,7 +124,7 @@ inline int run_pe_sim_and_export(op_kind op, std::filesystem::path const& verilo
     };
     auto read_sig_u8 = [&]() -> std::optional<std::uint8_t> {
         std::uint8_t out{};
-        for(std::size_t i{}; i < kW; ++i)
+        for(std::size_t i = 0; i < kW; ++i)
         {
             auto b = read_sig_bit(sig_y[i]);
             if(!b) { return std::nullopt; }
@@ -156,8 +156,8 @@ inline int run_pe_sim_and_export(op_kind op, std::filesystem::path const& verilo
         lcg = lcg * 1664525u + 1013904223u;
         std::uint8_t b = static_cast<std::uint8_t>(lcg >> 24);
 
-        for(std::size_t i{}; i < kW; ++i) { set_sig_bit(sig_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kW; ++i) { set_sig_bit(sig_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_sig_bit(sig_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_sig_bit(sig_b[i], ((b >> i) & 1u) != 0); }
         ::phy_engine::verilog::digital::simulate(top_inst, tick++);
 
         auto yv = read_sig_u8();
@@ -190,7 +190,7 @@ inline int run_pe_sim_and_export(op_kind op, std::filesystem::path const& verilo
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -303,8 +303,8 @@ inline int run_pe_sim_and_export(op_kind op, std::filesystem::path const& verilo
                                             : ::phy_engine::model::digital_node_statement_t::false_state));
     };
     auto set_inputs = [&](std::uint8_t a, std::uint8_t b) noexcept {
-        for(std::size_t i{}; i < kW; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kW; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
     };
     auto read_bit = [&](std::size_t pi) noexcept -> std::optional<bool> {
         auto const s = ports[pi]->node_information.dn.state;
@@ -314,7 +314,7 @@ inline int run_pe_sim_and_export(op_kind op, std::filesystem::path const& verilo
     };
     auto read_u8 = [&]() noexcept -> std::optional<std::uint8_t> {
         std::uint8_t v{};
-        for(std::size_t i{}; i < kW; ++i)
+        for(std::size_t i = 0; i < kW; ++i)
         {
             auto b = read_bit(out_y[i]);
             if(!b) { return std::nullopt; }

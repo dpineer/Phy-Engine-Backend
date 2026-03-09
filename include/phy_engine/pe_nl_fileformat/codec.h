@@ -124,7 +124,7 @@ namespace phy_engine::pe_nl_fileformat
             std::string out{};
             out.reserve(v.size());
             auto const* p = v.data();
-            for(std::size_t i{}; i < v.size(); ++i) { out.push_back(static_cast<char>(p[i])); }
+            for(std::size_t i = 0; i < v.size(); ++i) { out.push_back(static_cast<char>(p[i])); }
             return out;
         }
 

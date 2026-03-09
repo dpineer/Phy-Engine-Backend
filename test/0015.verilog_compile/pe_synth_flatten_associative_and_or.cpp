@@ -117,7 +117,7 @@ std::optional<run_result> run_once(::fast_io::u8string_view src, std::uint8_t op
 
     auto port_index = [&](::fast_io::u8string_view name) noexcept -> std::optional<std::size_t>
     {
-        for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+        for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
         {
             auto const& p = top_inst.mod->ports.index_unchecked(i);
             if(p.name == name) { return i; }
@@ -148,7 +148,7 @@ std::optional<run_result> run_once(::fast_io::u8string_view src, std::uint8_t op
 
     auto settle = [&]() noexcept
     {
-        for(std::size_t i{}; i < 4u; ++i) { c.digital_clk(); }
+        for(std::size_t i = 0; i < 4u; ++i) { c.digital_clk(); }
     };
 
     auto read_out = [&](std::size_t idx) noexcept -> std::optional<bool>

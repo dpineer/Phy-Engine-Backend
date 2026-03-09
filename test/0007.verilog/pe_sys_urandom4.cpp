@@ -93,7 +93,7 @@ endmodule
     if(!::phy_engine::netlist::add_to_node(nl, *in_rstn, 0, *ports[pi_rstn])) { return 9; }
 
     std::array<std::size_t, 4> pi_out{};
-    for(std::size_t i{}; i < 4; ++i)
+    for(std::size_t i = 0; i < 4; ++i)
     {
         pi_out[i] = port_idx("out[" + ::std::to_string(i) + "]");
         if(pi_out[i] == SIZE_MAX) { return 10; }
@@ -148,7 +148,7 @@ endmodule
     // Reset asserted: output must be 0.
     set_in(in_rstn, false);
     for(int i = 0; i < 2; ++i) { tick(); }
-    for(std::size_t i{}; i < 4; ++i)
+    for(std::size_t i = 0; i < 4; ++i)
     {
         auto const s = ports[pi_out[i]]->node_information.dn.state;
         if(s != ::phy_engine::model::digital_node_statement_t::false_state) { return 16; }
@@ -158,7 +158,7 @@ endmodule
     set_in(in_rstn, true);
     tick();
     std::uint8_t first{};
-    for(std::size_t i{}; i < 4; ++i)
+    for(std::size_t i = 0; i < 4; ++i)
     {
         auto const s = ports[pi_out[i]]->node_information.dn.state;
         if(s == ::phy_engine::model::digital_node_statement_t::true_state) { first |= static_cast<std::uint8_t>(1u << i); }

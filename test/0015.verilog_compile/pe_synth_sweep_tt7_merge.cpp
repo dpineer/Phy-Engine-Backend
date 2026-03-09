@@ -31,7 +31,7 @@ int main()
 
     // 7 named inputs (not constants).
     ::phy_engine::model::node_t* in_nodes[7]{};
-    for(std::size_t i{}; i < 7u; ++i)
+    for(std::size_t i = 0; i < 7u; ++i)
     {
         auto [m, pos] =
             ::phy_engine::netlist::add_model(nl, ::phy_engine::model::INPUT{.outputA = ::phy_engine::model::digital_node_statement_t::false_state});

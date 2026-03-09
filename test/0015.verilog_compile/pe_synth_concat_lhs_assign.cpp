@@ -78,7 +78,7 @@ endmodule
     std::array<std::size_t, 8> a_idx{};
     std::array<std::size_t, 8> b_idx{};
     std::array<std::size_t, 8> sum_idx{};
-    for(std::size_t i{}; i < 8; ++i)
+    for(std::size_t i = 0; i < 8; ++i)
     {
         a_idx[i] = port_idx(a_names[i]);
         b_idx[i] = port_idx(b_names[i]);
@@ -135,7 +135,7 @@ endmodule
         out_cout = m;
     }
 
-    for(std::size_t i{}; i < 8; ++i)
+    for(std::size_t i = 0; i < 8; ++i)
     {
         // Mark as external IO so pe_synth doesn't treat them as constant INPUTs.
         in_a[i]->name = ::fast_io::u8string{a_names[i]};
@@ -146,7 +146,7 @@ endmodule
     }
     in_cin->name = ::fast_io::u8string{u8"cin"};
     out_cout->name = ::fast_io::u8string{u8"cout"};
-    for(std::size_t i{}; i < 8; ++i) { out_sum[i]->name = ::fast_io::u8string{sum_names[i]}; }
+    for(std::size_t i = 0; i < 8; ++i) { out_sum[i]->name = ::fast_io::u8string{sum_names[i]}; }
     if(!::phy_engine::netlist::add_to_node(nl, *in_cin, 0, *ports[cin_idx])) { return 16; }
     if(!::phy_engine::netlist::add_to_node(nl, *out_cout, 0, *ports[cout_idx])) { return 17; }
 

@@ -26,7 +26,7 @@ endmodule
     if(top.mod == nullptr) { return 3; }
 
     auto port_signal = [&](std::string_view name) noexcept -> std::size_t {
-        for(std::size_t i{}; i < top.mod->ports.size(); ++i)
+        for(std::size_t i = 0; i < top.mod->ports.size(); ++i)
         {
             auto const& p = top.mod->ports.index_unchecked(i);
             std::string_view pn(reinterpret_cast<char const*>(p.name.data()), p.name.size());
@@ -40,7 +40,7 @@ endmodule
     if(sig_clk == SIZE_MAX || sig_rstn == SIZE_MAX) { return 4; }
 
     std::array<std::size_t, 4> sig_out{};
-    for(std::size_t i{}; i < 4; ++i)
+    for(std::size_t i = 0; i < 4; ++i)
     {
         sig_out[i] = port_signal("out[" + std::to_string(i) + "]");
         if(sig_out[i] == SIZE_MAX) { return 5; }
@@ -54,7 +54,7 @@ endmodule
 
     auto get_out = [&]() noexcept -> std::uint8_t {
         std::uint8_t v{};
-        for(std::size_t i{}; i < 4; ++i)
+        for(std::size_t i = 0; i < 4; ++i)
         {
             if(sig_out[i] >= top.state.values.size()) { continue; }
             auto const b = top.state.values.index_unchecked(sig_out[i]);

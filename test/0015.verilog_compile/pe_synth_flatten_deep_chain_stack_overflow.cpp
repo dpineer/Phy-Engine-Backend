@@ -47,7 +47,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> w{};
     w.reserve(G);
-    for(std::size_t i{}; i < G; ++i)
+    for(std::size_t i = 0; i < G; ++i)
     {
         auto& nref = ::phy_engine::netlist::create_node(nl);
         w.push_back(__builtin_addressof(nref));

@@ -174,11 +174,11 @@ int main()
         std::vector<std::string> ids;
         ids.reserve(32);
 
-        for(std::size_t i{}; i < 20; ++i) { ids.push_back(ex.add_circuit_element("And Gate", {0.0, 0.0, 0.0})); }
+        for(std::size_t i = 0; i < 20; ++i) { ids.push_back(ex.add_circuit_element("And Gate", {0.0, 0.0, 0.0})); }
         auto big = ex.add_circuit_element("Counter", {0.0, 0.0, 0.0}, std::nullopt, true, true);
         ids.push_back(big);
 
-        for(std::size_t i{}; i + 1 < ids.size(); ++i) { ex.connect(ids[i], 0, ids[i + 1], 1); }
+        for(std::size_t i = 0; i + 1 < ids.size(); ++i) { ex.connect(ids[i], 0, ids[i + 1], 1); }
 
         return std::pair{std::move(ex), std::move(ids)};
     };

@@ -101,7 +101,7 @@ endmodule
 
     ::std::array<::std::size_t, 15> pi_in{};
     ::std::array<::std::size_t, 15> pi_out{};
-    for(std::size_t i{}; i < 15; ++i)
+    for(std::size_t i = 0; i < 15; ++i)
     {
         auto const name_in = "in[" + ::std::to_string(i) + "]";
         auto const name_out = "out[" + ::std::to_string(i) + "]";
@@ -132,11 +132,11 @@ endmodule
     };
 
     auto run_case = [&](std::uint16_t in15) -> int {
-        for(std::size_t i{}; i < 15; ++i) { set_in(i, ((in15 >> i) & 1u) != 0u); }
+        for(std::size_t i = 0; i < 15; ++i) { set_in(i, ((in15 >> i) & 1u) != 0u); }
         settle();
 
         auto const exp = expect_shift_sticky(in15);
-        for(std::size_t i{}; i < 15; ++i)
+        for(std::size_t i = 0; i < 15; ++i)
         {
             auto const s = ports[pi_out[i]]->node_information.dn.state;
             if(s != ::phy_engine::model::digital_node_statement_t::false_state &&

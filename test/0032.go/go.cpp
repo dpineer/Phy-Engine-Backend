@@ -105,7 +105,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -225,7 +225,7 @@ int main()
     };
 
     auto set_bus = [&](auto const& bus, std::uint32_t v) {
-        for(std::size_t i{}; i < bus.size(); ++i)
+        for(std::size_t i = 0; i < bus.size(); ++i)
         {
             set_in(bus[i], ((v >> i) & 1u) != 0u);
         }
@@ -261,7 +261,7 @@ int main()
         set_in(in_place, false);
         set_bus(in_x, 0);
         set_bus(in_y, 0);
-        for(std::size_t i{}; i < n_ticks; ++i) { tick(); }
+        for(std::size_t i = 0; i < n_ticks; ++i) { tick(); }
     };
 
     auto reset = [&] {

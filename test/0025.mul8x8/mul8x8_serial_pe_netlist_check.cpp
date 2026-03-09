@@ -118,7 +118,7 @@ int main()
     };
     auto read_sig_u16 = [&]() -> std::optional<std::uint16_t> {
         std::uint16_t out{};
-        for(std::size_t i{}; i < kP; ++i)
+        for(std::size_t i = 0; i < kP; ++i)
         {
             auto b = read_sig_bit(sig_p[i]);
             if(!b) { return std::nullopt; }
@@ -128,8 +128,8 @@ int main()
     };
 
     auto verilog_check_one = [&](std::uint8_t a, std::uint8_t b, std::uint64_t& tick) -> bool {
-        for(std::size_t i{}; i < kA; ++i) { set_sig_bit(sig_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { set_sig_bit(sig_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { set_sig_bit(sig_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { set_sig_bit(sig_b[i], ((b >> i) & 1u) != 0); }
         ::phy_engine::verilog::digital::simulate(top_inst, tick++);
 
         auto pv = read_sig_u16();
@@ -166,7 +166,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -232,8 +232,8 @@ int main()
                                             : ::phy_engine::model::digital_node_statement_t::false_state));
     };
     auto set_inputs = [&](std::uint8_t a, std::uint8_t b) noexcept {
-        for(std::size_t i{}; i < kA; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
     };
     auto read_bit = [&](std::size_t pi) noexcept -> std::optional<bool> {
         auto const s = ports[pi]->node_information.dn.state;
@@ -243,7 +243,7 @@ int main()
     };
     auto read_u16 = [&]() noexcept -> std::optional<std::uint16_t> {
         std::uint16_t v{};
-        for(std::size_t i{}; i < kP; ++i)
+        for(std::size_t i = 0; i < kP; ++i)
         {
             auto b = read_bit(out_p[i]);
             if(!b) { return std::nullopt; }

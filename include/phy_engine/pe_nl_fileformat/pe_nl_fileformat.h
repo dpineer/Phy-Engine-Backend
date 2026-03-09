@@ -760,7 +760,7 @@ namespace phy_engine::pe_nl_fileformat
                         auto pv = p->ptr->generate_pin_view();
                         std::string pins{};
                         details::append_uleb128(pins, pv.size);
-                        for(std::size_t i{}; i < pv.size; ++i)
+                        for(std::size_t i = 0; i < pv.size; ++i)
                         {
                             auto const* n = pv.pins[i].nodes;
                             std::uint64_t idv = kNodeNull;
@@ -1162,7 +1162,7 @@ namespace phy_engine::pe_nl_fileformat
                     ::std::vector<::fast_io::u8string_view> saved_names{};
                     saved_nodes.resize(pv_before.size);
                     saved_names.resize(pv_before.size);
-                    for(std::size_t i{}; i < pv_before.size; ++i)
+                    for(std::size_t i = 0; i < pv_before.size; ++i)
                     {
                         saved_nodes[i] = pv_before.pins[i].nodes;
                         saved_names[i] = pv_before.pins[i].name;
@@ -1175,7 +1175,7 @@ namespace phy_engine::pe_nl_fileformat
                     }
                     auto pv_after = mb->ptr->generate_pin_view();
                     if(pv_after.size != pv_before.size) { return {errc::unsupported, "checkpoint load changed pin count"}; }
-                    for(std::size_t i{}; i < pv_after.size; ++i)
+                    for(std::size_t i = 0; i < pv_after.size; ++i)
                     {
                         pv_after.pins[i].nodes = saved_nodes[i];
                         pv_after.pins[i].name = saved_names[i];
@@ -1234,7 +1234,7 @@ namespace phy_engine::pe_nl_fileformat
                 // Reset pin pointers and connect according to saved mapping.
                 {
                     auto pv = mb->ptr->generate_pin_view();
-                    for(std::size_t i{}; i < pv.size; ++i)
+                    for(std::size_t i = 0; i < pv.size; ++i)
                     {
                         pv.pins[i].nodes = nullptr;
                         pv.pins[i].model = mb;
@@ -1248,7 +1248,7 @@ namespace phy_engine::pe_nl_fileformat
                     st = details::read_uleb128(pins, off, pcount);
                     if(!st) { return st; }
                     if(pcount != pv.size) { return {errc::corrupt, "pin count mismatch"}; }
-                    for(std::size_t i{}; i < pv.size; ++i)
+                    for(std::size_t i = 0; i < pv.size; ++i)
                     {
                         std::uint64_t idv{};
                         st = details::read_trivial(pins, off, idv);

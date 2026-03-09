@@ -207,7 +207,7 @@ int main()
         if(rng == nullptr || rng->ptr == nullptr) { return 4; }
         rng->name.clear();
         rng->name.append(::fast_io::u8string_view{reinterpret_cast<char8_t const*>(name), ::std::strlen(name)});
-        for(std::size_t i{}; i < 4; ++i)
+        for(std::size_t i = 0; i < 4; ++i)
         {
             if(!::phy_engine::netlist::add_to_node(nl, *rng, i, *out[i])) { return 5; }
         }
@@ -253,7 +253,7 @@ int main()
         bind.emplace("btn_down", __builtin_addressof(n_btn_down));
         bind.emplace("btn_left", __builtin_addressof(n_btn_left));
         bind.emplace("btn_right", __builtin_addressof(n_btn_right));
-        for(std::size_t i{}; i < 2; ++i)
+        for(std::size_t i = 0; i < 2; ++i)
         {
             bind.emplace("dir[" + std::to_string(i) + "]", dir_bits[i]);
             bind.emplace("next_dir[" + std::to_string(i) + "]", next_dir_bits[i]);
@@ -264,19 +264,19 @@ int main()
     // snake_head_next
     {
         std::unordered_map<std::string, ::phy_engine::model::node_t*> bind{};
-        for(std::size_t i{}; i < 6; ++i)
+        for(std::size_t i = 0; i < 6; ++i)
         {
             bind.emplace("idx_head[" + std::to_string(i) + "]", idx_head[i]);
             bind.emplace("idx_head_next[" + std::to_string(i) + "]", idx_head_next[i]);
         }
-        for(std::size_t i{}; i < 2; ++i) { bind.emplace("next_dir[" + std::to_string(i) + "]", next_dir_bits[i]); }
+        for(std::size_t i = 0; i < 2; ++i) { bind.emplace("next_dir[" + std::to_string(i) + "]", next_dir_bits[i]); }
         (void)synth_one_module(nl, dir / "snake_head_next.v", u8"snake_head_next", bind);
     }
 
     // snake_hit_eat
     {
         std::unordered_map<std::string, ::phy_engine::model::node_t*> bind{};
-        for(std::size_t i{}; i < 6; ++i)
+        for(std::size_t i = 0; i < 6; ++i)
         {
             bind.emplace("idx_head_next[" + std::to_string(i) + "]", idx_head_next[i]);
             bind.emplace("idx0[" + std::to_string(i) + "]", idx0[i]);
@@ -292,12 +292,12 @@ int main()
     // snake_food_pick
     {
         std::unordered_map<std::string, ::phy_engine::model::node_t*> bind{};
-        for(std::size_t i{}; i < 4; ++i)
+        for(std::size_t i = 0; i < 4; ++i)
         {
             bind.emplace("rnd_a[" + std::to_string(i) + "]", rnd_a[i]);
             bind.emplace("rnd_b[" + std::to_string(i) + "]", rnd_b[i]);
         }
-        for(std::size_t i{}; i < 6; ++i)
+        for(std::size_t i = 0; i < 6; ++i)
         {
             bind.emplace("idx_head_next[" + std::to_string(i) + "]", idx_head_next[i]);
             bind.emplace("idx_head_now[" + std::to_string(i) + "]", idx_head[i]);
@@ -318,12 +318,12 @@ int main()
         bind.emplace("hit_body", __builtin_addressof(n_hit_body));
         bind.emplace("game_over", __builtin_addressof(n_game_over));
 
-        for(std::size_t i{}; i < 2; ++i)
+        for(std::size_t i = 0; i < 2; ++i)
         {
             bind.emplace("next_dir[" + std::to_string(i) + "]", next_dir_bits[i]);
             bind.emplace("dir[" + std::to_string(i) + "]", dir_bits[i]);
         }
-        for(std::size_t i{}; i < 6; ++i)
+        for(std::size_t i = 0; i < 6; ++i)
         {
             bind.emplace("idx_head_next[" + std::to_string(i) + "]", idx_head_next[i]);
             bind.emplace("new_food_idx[" + std::to_string(i) + "]", new_food_idx[i]);
@@ -344,7 +344,7 @@ int main()
 
     {
         std::unordered_map<std::string, ::phy_engine::model::node_t*> bind{};
-        for(std::size_t i{}; i < 6; ++i)
+        for(std::size_t i = 0; i < 6; ++i)
         {
             bind.emplace("idx_head[" + std::to_string(i) + "]", idx_head[i]);
             bind.emplace("idx0[" + std::to_string(i) + "]", idx0[i]);
@@ -353,13 +353,13 @@ int main()
             bind.emplace("idx_food[" + std::to_string(i) + "]", idx_food[i]);
         }
         bind.emplace("game_over", __builtin_addressof(n_game_over));
-        for(std::size_t i{}; i < 64; ++i) { bind.emplace("pix[" + std::to_string(i) + "]", pix[i]); }
+        for(std::size_t i = 0; i < 64; ++i) { bind.emplace("pix[" + std::to_string(i) + "]", pix[i]); }
 
         (void)synth_one_module(nl, dir / "snake_render.v", u8"snake_render", bind);
     }
 
     // External observe pix as Logic Outputs.
-    for(std::size_t i{}; i < 64; ++i)
+    for(std::size_t i = 0; i < 64; ++i)
     {
         auto [m, pos] = ::phy_engine::netlist::add_model(nl, ::phy_engine::model::OUTPUT{});
         (void)pos;

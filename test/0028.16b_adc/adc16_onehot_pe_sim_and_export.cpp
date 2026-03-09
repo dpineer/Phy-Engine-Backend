@@ -89,7 +89,7 @@ std::size_t expected_bin(double vin) noexcept
     // Thresholds at (i+1)/16 * Vref.
     // bin 0: vin < 1/16 Vref; bin 15: vin >= 15/16 Vref.
     if(!(vin >= 0.0)) { return 0; }
-    for(std::size_t i{}; i < kThresholds; ++i)
+    for(std::size_t i = 0; i < kThresholds; ++i)
     {
         double const vth = (static_cast<double>(i + 1) / static_cast<double>(kLevels)) * kVref;
         if(vin < vth) { return i; }
@@ -176,7 +176,7 @@ adc_net build_adc(::phy_engine::netlist::netlist& nl,
 
     // Comparators: cmp[i] = (vin >= Vth[i]), where Vth[i] = (i+1)/16 * Vref.
     r.cmp_nodes.resize(kThresholds);
-    for(std::size_t i{}; i < kThresholds; ++i)
+    for(std::size_t i = 0; i < kThresholds; ++i)
     {
         auto& n_cmp = ::phy_engine::netlist::create_node(nl);
         r.cmp_nodes[i] = __builtin_addressof(n_cmp);
@@ -199,7 +199,7 @@ adc_net build_adc(::phy_engine::netlist::netlist& nl,
     // Output nodes + probes (Logic Outputs in PL export).
     r.out_nodes.resize(kLevels);
     r.out_probes.resize(kLevels);
-    for(std::size_t i{}; i < kLevels; ++i)
+    for(std::size_t i = 0; i < kLevels; ++i)
     {
         auto& n_out = ::phy_engine::netlist::create_node(nl);
         r.out_nodes[i] = __builtin_addressof(n_out);
@@ -338,7 +338,7 @@ char dn_char(::phy_engine::model::digital_node_statement_t st) noexcept
 
 bool check_onehot_outputs(adc_net const& adc, double vin, std::size_t expected_idx)
 {
-    for(std::size_t i{}; i < kLevels; ++i)
+    for(std::size_t i = 0; i < kLevels; ++i)
     {
         auto* n = adc.out_nodes[i];
         assert(n != nullptr);
@@ -348,13 +348,13 @@ bool check_onehot_outputs(adc_net const& adc, double vin, std::size_t expected_i
         {
             std::fprintf(stderr, "adc16_onehot mismatch: vin=%.9f expected_bin=%zu\n", vin, expected_idx);
             std::fprintf(stderr, "  out:");
-            for(std::size_t k{}; k < kLevels; ++k)
+            for(std::size_t k = 0; k < kLevels; ++k)
             {
                 std::fprintf(stderr, " %c", dn_char(adc.out_nodes[k]->node_information.dn.state));
             }
             std::fprintf(stderr, "\n");
             std::fprintf(stderr, "  cmp:");
-            for(std::size_t k{}; k < kThresholds; ++k)
+            for(std::size_t k = 0; k < kThresholds; ++k)
             {
                 auto const st = adc.cmp_nodes[k]->node_information.dn.state;
                 std::fprintf(stderr, " %c", dn_char(st));

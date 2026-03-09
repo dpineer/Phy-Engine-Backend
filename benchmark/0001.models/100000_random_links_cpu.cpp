@@ -124,7 +124,7 @@ namespace
 #
         std::vector<::phy_engine::model::node_t*> ns{};
         ns.reserve(nodes);
-        for(std::size_t i{}; i < nodes; ++i)
+        for(std::size_t i = 0; i < nodes; ++i)
         {
             auto& n{create_node(nl)};
             ns.push_back(std::addressof(n));
@@ -136,7 +136,7 @@ namespace
             add_to_node(nl, *Rg, 0, nl.ground_node);
             add_to_node(nl, *Rg, 1, *ns[0]);
         }
-        for(std::size_t i{}; i + 1 < nodes; ++i)
+        for(std::size_t i = 0; i + 1 < nodes; ++i)
         {
             auto [R, _]{add_model(nl, ::phy_engine::model::resistance{.r = r_chain})};
             add_to_node(nl, *R, 0, *ns[i]);
@@ -152,7 +152,7 @@ namespace
 #
         std::mt19937_64 rng{seed};
         std::uniform_int_distribution<std::size_t> dist(0, nodes - 1);
-        for(std::size_t i{}; i < links; ++i)
+        for(std::size_t i = 0; i < links; ++i)
         {
             auto a{dist(rng)};
             auto b{dist(rng)};
@@ -187,7 +187,7 @@ int main(int argc, char** argv)
 #
     ::fast_io::io::perr("CPU random links benchmark: nodes=", cfg.nodes, ", warmup=", cfg.warmup, ", iters=", cfg.iters, ", seed=", cfg.seed, "\n");
     ::fast_io::io::perr("links cases: ");
-    for(std::size_t i{}; i < cfg.links.size(); ++i)
+    for(std::size_t i = 0; i < cfg.links.size(); ++i)
     {
         if(i) { ::fast_io::io::perr(","); }
         ::fast_io::io::perr(cfg.links[i]);
@@ -201,7 +201,7 @@ int main(int argc, char** argv)
 #
         c.prepare();
 #
-        for(std::size_t i{}; i < cfg.warmup; ++i)
+        for(std::size_t i = 0; i < cfg.warmup; ++i)
         {
             if(!c.solve_once())
             {
@@ -213,7 +213,7 @@ int main(int argc, char** argv)
         auto const nnz{nnz_from_mna(c)};
 #
         auto const t0{std::chrono::steady_clock::now()};
-        for(std::size_t i{}; i < cfg.iters; ++i)
+        for(std::size_t i = 0; i < cfg.iters; ++i)
         {
             if(!c.solve_once())
             {

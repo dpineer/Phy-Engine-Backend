@@ -84,7 +84,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -162,7 +162,7 @@ int main()
 
     auto read_y_if_binary = [&]() -> std::optional<std::uint16_t> {
         std::uint16_t y{};
-        for(std::size_t i{}; i < kY; ++i)
+        for(std::size_t i = 0; i < kY; ++i)
         {
             auto const s = ports[out_y[i]]->node_information.dn.state;
             if(s != ::phy_engine::model::digital_node_statement_t::false_state &&
@@ -191,8 +191,8 @@ int main()
 
     for(auto const& t : cases)
     {
-        for(std::size_t i{}; i < kA; ++i) { set_in(in_a[i], ((t.a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { set_in(in_b[i], ((t.b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { set_in(in_a[i], ((t.a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { set_in(in_b[i], ((t.b >> i) & 1u) != 0); }
         set_in(in_sub, t.sub);
         settle();
 

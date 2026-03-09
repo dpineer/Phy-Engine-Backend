@@ -301,7 +301,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(st_pe.mod->ports.size());
-    for(std::size_t i{}; i < st_pe.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < st_pe.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -368,16 +368,16 @@ int main()
     };
 
     auto pe_set_inputs = [&](std::uint16_t a, std::uint16_t b, std::uint8_t opv) {
-        for(std::size_t i{}; i < kA; ++i) { pe_set_in(in_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { pe_set_in(in_b[i], ((b >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kOP; ++i) { pe_set_in(in_op[i], ((opv >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { pe_set_in(in_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { pe_set_in(in_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kOP; ++i) { pe_set_in(in_op[i], ((opv >> i) & 1u) != 0); }
     };
 
     auto pe_settle = [&]() noexcept { c.digital_clk(); };
 
     auto pe_read_y = [&]() -> std::optional<std::uint16_t> {
         std::uint16_t y{};
-        for(std::size_t i{}; i < kY; ++i)
+        for(std::size_t i = 0; i < kY; ++i)
         {
             auto const s = ports[out_y[i]]->node_information.dn.state;
             if(s != ::phy_engine::model::digital_node_statement_t::false_state &&
@@ -433,7 +433,7 @@ int main()
     }
 
     rng64 rng{};
-    for(std::size_t i{}; i < 64; ++i)
+    for(std::size_t i = 0; i < 64; ++i)
     {
         std::uint16_t a = static_cast<std::uint16_t>(rng.next() & 0xFFFFu);
         std::uint16_t b = static_cast<std::uint16_t>((rng.next() >> 16) & 0xFFFFu);
@@ -446,7 +446,7 @@ int main()
     {
         for(std::uint8_t opv{}; opv < 4; ++opv) { cases_cross.push_back({a, b, opv}); }
     }
-    for(std::size_t i{}; i < 32; ++i)
+    for(std::size_t i = 0; i < 32; ++i)
     {
         std::uint16_t a = static_cast<std::uint16_t>(rng.next() & 0xFFFFu);
         std::uint16_t b = static_cast<std::uint16_t>((rng.next() >> 16) & 0xFFFFu);

@@ -22,7 +22,7 @@ namespace phy_engine::pe_nl_fileformat
         inline std::uint64_t fnv1a_update(std::uint64_t h, void const* data, std::size_t n) noexcept
         {
             auto const* p = static_cast<unsigned char const*>(data);
-            for(std::size_t i{}; i < n; ++i)
+            for(std::size_t i = 0; i < n; ++i)
             {
                 h ^= static_cast<std::uint64_t>(p[i]);
                 h *= fnv1a_prime;

@@ -449,7 +449,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             context ctx(ex, bounds, w, h);
 
             ctx.id_to_index.reserve(ex.elements().size());
-            for(std::size_t i{}; i < ex.elements().size(); ++i)
+            for(std::size_t i = 0; i < ex.elements().size(); ++i)
             {
                 auto id_r = ex.elements()[i].identifier_ec();
                 if(!id_r) { return id_r.st; }
@@ -460,7 +460,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             ctx.placed.assign(ex.elements().size(), std::nullopt);
             ctx.movable.reserve(ex.elements().size());
 
-            for(std::size_t i{}; i < ex.elements().size(); ++i)
+            for(std::size_t i = 0; i < ex.elements().size(); ++i)
             {
                 auto const& e = ex.elements()[i];
                 if(e.participate_in_layout())
@@ -623,7 +623,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
         {
             double s = 0.0;
             auto const n = std::min(a.size(), b.size());
-            for(std::size_t i{}; i < n; ++i) { s += a[i] * b[i]; }
+            for(std::size_t i = 0; i < n; ++i) { s += a[i] * b[i]; }
             return s;
         }
 
@@ -641,14 +641,14 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             for(auto const& b: basis)
             {
                 auto const proj = dot(v, b);
-                for(std::size_t i{}; i < v.size(); ++i) { v[i] -= proj * b[i]; }
+                for(std::size_t i = 0; i < v.size(); ++i) { v[i] -= proj * b[i]; }
             }
         }
 
         inline std::vector<double> degrees(weighted_adj const& g)
         {
             std::vector<double> deg(g.size(), 0.0);
-            for(std::size_t i{}; i < g.size(); ++i)
+            for(std::size_t i = 0; i < g.size(); ++i)
             {
                 double s = 0.0;
                 for(auto const& e: g[i]) { s += e.w; }
@@ -660,7 +660,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
         inline void multiply_norm_adj(weighted_adj const& g, std::vector<double> const& deg, std::vector<double> const& in, std::vector<double>& out) noexcept
         {
             out.assign(g.size(), 0.0);
-            for(std::size_t i{}; i < g.size(); ++i)
+            for(std::size_t i = 0; i < g.size(); ++i)
             {
                 auto const di = deg[i];
                 if(di <= 0.0) { continue; }
@@ -824,7 +824,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             }
 
             std::vector<int> to_sub(ex.elements().size(), -1);
-            for(std::size_t i{}; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
+            for(std::size_t i = 0; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
 
             weighted_adj g(ctx.movable.size());
             for(std::size_t si{}; si < ctx.movable.size(); ++si)
@@ -939,7 +939,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             std::vector<int> level(n, -1);
             std::queue<std::size_t> q;
 
-            for(std::size_t i{}; i < n; ++i)
+            for(std::size_t i = 0; i < n; ++i)
             {
                 auto const mid = ex.elements()[i].data().value("ModelID", "");
                 if(is_input_like(mid))
@@ -1008,7 +1008,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             auto rebuild_pos = [&](std::size_t l)
             {
                 auto const& nodes = layers[l];
-                for(std::size_t i{}; i < nodes.size(); ++i) { pos_in_layer[nodes[i]] = i; }
+                for(std::size_t i = 0; i < nodes.size(); ++i) { pos_in_layer[nodes[i]] = i; }
             };
             for(std::size_t l{}; l < layers.size(); ++l) { rebuild_pos(l); }
 
@@ -1162,7 +1162,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             }
 
             std::vector<int> to_sub(ex.elements().size(), -1);
-            for(std::size_t i{}; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
+            for(std::size_t i = 0; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
 
             // Build induced graph for movable nodes.
             weighted_adj g(ctx.movable.size());
@@ -1224,7 +1224,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             for(std::size_t it{}; it < iters; ++it)
             {
                 for(auto& b: buckets) { b.clear(); }
-                for(std::size_t i{}; i < ctx.movable.size(); ++i) { buckets[bin_idx(x[i], y[i])].push_back(i); }
+                for(std::size_t i = 0; i < ctx.movable.size(); ++i) { buckets[bin_idx(x[i], y[i])].push_back(i); }
 
                 std::fill(fx.begin(), fx.end(), 0.0);
                 std::fill(fy.begin(), fy.end(), 0.0);
@@ -1291,7 +1291,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
                 // Integrate with annealing-like step.
                 double const t = 1.0 - (static_cast<double>(it) / static_cast<double>(iters));
                 double const step = 0.2 * t;
-                for(std::size_t i{}; i < ctx.movable.size(); ++i)
+                for(std::size_t i = 0; i < ctx.movable.size(); ++i)
                 {
                     x[i] = clamp01(x[i] + std::clamp(fx[i], -step, step));
                     y[i] = clamp01(y[i] + std::clamp(fy[i], -step, step));
@@ -1399,7 +1399,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
 
             auto const m = ctx.movable.size();
             std::vector<int> to_sub(ex.elements().size(), -1);
-            for(std::size_t i{}; i < m; ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
+            for(std::size_t i = 0; i < m; ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
 
             std::vector<std::vector<std::size_t>> sub_adj(m);
             std::vector<std::size_t> sub_degree(m, 0);
@@ -1420,7 +1420,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
 
             // Label propagation clustering (fast, deterministic).
             std::vector<std::size_t> label(m);
-            for(std::size_t i{}; i < m; ++i) { label[i] = i; }
+            for(std::size_t i = 0; i < m; ++i) { label[i] = i; }
 
             std::vector<std::size_t> order(m);
             std::iota(order.begin(), order.end(), 0);
@@ -1534,7 +1534,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
                         }
                     }
 
-                    for(std::size_t i{}; i < bfs_order.size(); i += opt.cluster_max_nodes)
+                    for(std::size_t i = 0; i < bfs_order.size(); i += opt.cluster_max_nodes)
                     {
                         auto const end = std::min(bfs_order.size(), i + opt.cluster_max_nodes);
                         split.emplace_back(bfs_order.begin() + static_cast<std::ptrdiff_t>(i), bfs_order.begin() + static_cast<std::ptrdiff_t>(end));
@@ -1928,7 +1928,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             std::vector<fixed_anchor> out{};
             out.reserve(ex.elements().size());
 
-            for(std::size_t i{}; i < ex.elements().size(); ++i)
+            for(std::size_t i = 0; i < ex.elements().size(); ++i)
             {
                 auto const& e = ex.elements()[i];
                 if(e.participate_in_layout()) { continue; }
@@ -2004,7 +2004,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             std::vector<int> level(n, -1);
             std::queue<std::size_t> q;
 
-            for(std::size_t i{}; i < n; ++i)
+            for(std::size_t i = 0; i < n; ++i)
             {
                 auto const mid = ex.elements()[i].data().value("ModelID", "");
                 if(is_input_like(mid))
@@ -2213,7 +2213,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             }
 
             std::vector<int> to_sub(ex.elements().size(), -1);
-            for(std::size_t i{}; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
+            for(std::size_t i = 0; i < ctx.movable.size(); ++i) { to_sub[ctx.movable[i]] = static_cast<int>(i); }
 
             // Build induced graph for movable nodes.
             weighted_adj g(ctx.movable.size());
@@ -2280,7 +2280,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
             for(std::size_t it{}; it < iters; ++it)
             {
                 for(auto& b: buckets) { b.clear(); }
-                for(std::size_t i{}; i < ctx.movable.size(); ++i) { buckets[bin_idx(x[i], y[i], z[i])].push_back(i); }
+                for(std::size_t i = 0; i < ctx.movable.size(); ++i) { buckets[bin_idx(x[i], y[i], z[i])].push_back(i); }
 
                 std::fill(fx.begin(), fx.end(), 0.0);
                 std::fill(fy.begin(), fy.end(), 0.0);
@@ -2364,7 +2364,7 @@ namespace phy_engine::phy_lab_wrapper::auto_layout
                 // Integrate with annealing-like step.
                 double const t = 1.0 - (static_cast<double>(it) / static_cast<double>(iters));
                 double const step = 0.2 * t;
-                for(std::size_t i{}; i < ctx.movable.size(); ++i)
+                for(std::size_t i = 0; i < ctx.movable.size(); ++i)
                 {
                     x[i] = clamp01(x[i] + std::clamp(fx[i], -step, step));
                     y[i] = clamp01(y[i] + std::clamp(fy[i], -step, step));

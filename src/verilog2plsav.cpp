@@ -132,7 +132,7 @@ static group_layout collect_groups(::phy_engine::verilog::digital::compiled_modu
         }
     }
     gl.row_by_base.reserve(gl.order.size());
-    for(std::size_t i{}; i < gl.order.size(); ++i) { gl.row_by_base.emplace(gl.order[i], i); }
+    for(std::size_t i = 0; i < gl.order.size(); ++i) { gl.row_by_base.emplace(gl.order[i], i); }
     return gl;
 }
 
@@ -990,7 +990,7 @@ int main(int argc, char** argv)
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));

@@ -102,14 +102,14 @@ int main()
     // Port nodes in module port order.
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
     }
 
     auto find_port = [&](char const* name) -> std::size_t {
-        for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+        for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
         {
             auto const& pn = top_inst.mod->ports.index_unchecked(i).name;
             std::string s(reinterpret_cast<char const*>(pn.data()), pn.size());

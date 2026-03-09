@@ -111,7 +111,7 @@ inline pl_model_mapping identity_mapping(std::string mid, std::size_t pin_count,
     m.model_id = std::move(mid);
     m.is_big_element = big;
     m.pe_to_pl_pin.reserve(pin_count);
-    for(std::size_t i{}; i < pin_count; ++i) { m.pe_to_pl_pin.emplace(i, static_cast<int>(i)); }
+    for(std::size_t i = 0; i < pin_count; ++i) { m.pe_to_pl_pin.emplace(i, static_cast<int>(i)); }
     return m;
 }
 

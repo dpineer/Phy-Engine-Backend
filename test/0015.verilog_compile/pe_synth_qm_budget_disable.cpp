@@ -109,7 +109,7 @@ endmodule
     if(br.top.mod == nullptr) { return false; }
 
     br.ports.reserve(br.top.mod->ports.size());
-    for(std::size_t i{}; i < br.top.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < br.top.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         br.ports.push_back(__builtin_addressof(n));

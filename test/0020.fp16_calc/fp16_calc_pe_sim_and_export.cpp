@@ -295,7 +295,7 @@ int main()
     // Port nodes in module port order.
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -476,19 +476,19 @@ int main()
             return true;
         };
 
-        for(std::size_t i{}; i < kA; ++i)
+        for(std::size_t i = 0; i < kA; ++i)
         {
             if(!assert_pos(pl_model_id::logic_input, "a[" + std::to_string(i) + "]", position{x_for_bit(i, kA), kRowA, 0.0})) { return 24; }
         }
-        for(std::size_t i{}; i < kB; ++i)
+        for(std::size_t i = 0; i < kB; ++i)
         {
             if(!assert_pos(pl_model_id::logic_input, "b[" + std::to_string(i) + "]", position{x_for_bit(i, kB), kRowB, 0.0})) { return 25; }
         }
-        for(std::size_t i{}; i < kOP; ++i)
+        for(std::size_t i = 0; i < kOP; ++i)
         {
             if(!assert_pos(pl_model_id::logic_input, "op[" + std::to_string(i) + "]", position{x_for_bit(i, kOP), kRowOP, 0.0})) { return 26; }
         }
-        for(std::size_t i{}; i < kY; ++i)
+        for(std::size_t i = 0; i < kY; ++i)
         {
             if(!assert_pos(pl_model_id::logic_output, "y[" + std::to_string(i) + "]", position{x_for_bit(i, kY), kRowY, 0.0})) { return 27; }
         }
@@ -503,7 +503,7 @@ int main()
     };
     auto compute_y_if_binary = [&]() -> std::optional<std::uint16_t> {
         std::uint16_t y{};
-        for(std::size_t i{}; i < kY; ++i)
+        for(std::size_t i = 0; i < kY; ++i)
         {
             auto const s = ports[out_y[i]]->node_information.dn.state;
             if(s != ::phy_engine::model::digital_node_statement_t::false_state &&
@@ -520,15 +520,15 @@ int main()
         // The PE update-table scheduler is edge-driven; if an input bit never changes from its
         // initial value, parts of the combinational netlist can remain X/Z forever.
         // So, force a toggle on every input bit first, then set the real value.
-        for(std::size_t i{}; i < kA; ++i) { set_in(in_a[i], (((tc.a ^ 0xFFFFu) >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { set_in(in_b[i], (((tc.b ^ 0xFFFFu) >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kOP; ++i) { set_in(in_op[i], (((tc.op ^ 0x3u) >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { set_in(in_a[i], (((tc.a ^ 0xFFFFu) >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { set_in(in_b[i], (((tc.b ^ 0xFFFFu) >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kOP; ++i) { set_in(in_op[i], (((tc.op ^ 0x3u) >> i) & 1u) != 0); }
         c.digital_clk();
         c.digital_clk();
 
-        for(std::size_t i{}; i < kA; ++i) { set_in(in_a[i], ((tc.a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kB; ++i) { set_in(in_b[i], ((tc.b >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kOP; ++i) { set_in(in_op[i], ((tc.op >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kA; ++i) { set_in(in_a[i], ((tc.a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kB; ++i) { set_in(in_b[i], ((tc.b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kOP; ++i) { set_in(in_op[i], ((tc.op >> i) & 1u) != 0); }
     };
 
     auto settle = [&]() noexcept

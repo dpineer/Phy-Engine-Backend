@@ -89,7 +89,7 @@ int main()
 
     std::vector<::phy_engine::model::node_t*> ports{};
     ports.reserve(top_inst.mod->ports.size());
-    for(std::size_t i{}; i < top_inst.mod->ports.size(); ++i)
+    for(std::size_t i = 0; i < top_inst.mod->ports.size(); ++i)
     {
         auto& n = ::phy_engine::netlist::create_node(nl);
         ports.push_back(__builtin_addressof(n));
@@ -162,8 +162,8 @@ int main()
                                             : ::phy_engine::model::digital_node_statement_t::false_state));
     };
     auto set_inputs = [&](std::uint8_t a, std::uint8_t b, bool cin) noexcept {
-        for(std::size_t i{}; i < kW; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
-        for(std::size_t i{}; i < kW; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_in(in_a[i], ((a >> i) & 1u) != 0); }
+        for(std::size_t i = 0; i < kW; ++i) { set_in(in_b[i], ((b >> i) & 1u) != 0); }
         set_in(in_c, cin);
     };
     auto read_bit = [&](std::size_t pi) noexcept -> std::optional<bool> {
@@ -174,7 +174,7 @@ int main()
     };
     auto read_u8 = [&]() noexcept -> std::optional<std::uint8_t> {
         std::uint8_t v{};
-        for(std::size_t i{}; i < kW; ++i)
+        for(std::size_t i = 0; i < kW; ++i)
         {
             auto b = read_bit(out_s[i]);
             if(!b) { return std::nullopt; }
